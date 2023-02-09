@@ -1,7 +1,16 @@
-# Importing essentual modules
+from authenticateUser import authenticate
+
+# Importing modules for webscraping
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+
+# Importing modules for google calendar api
+import os
+import google.auth
+from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 
 # Scraping the webpage and getting the data
 url = "https://www.otago.ac.nz/news/events/keydates/"
@@ -45,14 +54,46 @@ for month in data:
 
 
 
-# Iterate over the data printing the events date and name 
-for month in data:
-    events = data[month]
-    for date in events:
-        print(date, events[date])
-    print("\n\n")
+# TESTING: Iterate over the data printing the events date and name 
+# for month in data:
+#     events = data[month]
+#     for date in events:
+#         print(date, events[date])
+#     print("\n\n")
 
-# for i in data["January"].keys():
-#     print(i)
+
+# Google Calendar API
+
+# Authenticating the user via local webserver and building the service
+creds = authenticate()
+
+# Try to create the service followed by the resulting events 
+try:
+    service = build('calendar', 'v3', credentials=creds)
+
+    # TESTING: Creating test event 
+    event = {
+        'summary': 'Test Event using Google Calendar API',
+        'location': '800 Howard St., San Francisco, CA 94103',
+        'description': 'A chance to test the google calendar api',
+        'start': {
+            'date': '2023-02-09',
+        },
+        'end': {
+            'date': '2023-02-09',
+        },
+        'transparency': 'transparent',
+        'visibility': 'public'
+    }
+
+    # Calendar to insert event into: 'primary'
+    calendar_id = 'fe37442ef0332cbc52ec1e0e61f1b966e5b7e3c5d4c1ab0ce860789253b2bc38@group.calendar.google.com'
+
+    # Executing the event creation
+    event = service.events().insert(calendarId=calendar_id, body=event).execute()
+    print(f"Event created: {event.get('htmlLink')}")
+
+except HttpError as error:
+    print(f'[ERROR] : {error}')
 
 
