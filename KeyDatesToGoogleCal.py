@@ -6,9 +6,9 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 # Importing modules for google calendar api
-import os
-import google.auth
-from google.oauth2.credentials import Credentials
+# import os
+# import google.auth
+# from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
@@ -43,7 +43,6 @@ for month in data:
         event = events.select("dd")[i].text
 
         # convert date to datetime object from this format: Monday, 9 January
-
         date = datetime.strptime(date, "%A, %d %B").replace(year=2023)
 
         # Append the date and event to the dictionary
@@ -54,14 +53,6 @@ for month in data:
 
 
 
-# TESTING: Iterate over the data printing the events date and name 
-# for month in data:
-#     events = data[month]
-#     for date in events:
-#         print(date, events[date])
-#     print("\n\n")
-
-
 # Google Calendar API
 
 # Authenticating the user via local webserver and building the service
@@ -69,29 +60,36 @@ creds = authenticate()
 
 # Try to create the service followed by the resulting events 
 try:
-    service = build('calendar', 'v3', credentials=creds)
-
-    # TESTING: Creating test event 
-    event = {
-        'summary': 'Test Event using Google Calendar API',
-        'location': '800 Howard St., San Francisco, CA 94103',
-        'description': 'A chance to test the google calendar api',
-        'start': {
-            'date': '2023-02-09',
-        },
-        'end': {
-            'date': '2023-02-09',
-        },
-        'transparency': 'transparent',
-        'visibility': 'public'
-    }
-
-    # Calendar to insert event into: 'primary'
+    # Calendar to insert event into: 'UoO Key Dates'
     calendar_id = 'fe37442ef0332cbc52ec1e0e61f1b966e5b7e3c5d4c1ab0ce860789253b2bc38@group.calendar.google.com'
 
-    # Executing the event creation
-    event = service.events().insert(calendarId=calendar_id, body=event).execute()
-    print(f"Event created: {event.get('htmlLink')}")
+    service = build('calendar', 'v3', credentials=creds)
+
+    # Iterating over the data dict storing the months and events
+    for month, events in data.items():
+
+        print(month)
+
+        events = data[month]
+        for date, event_title in events.items():
+            event = {
+                'summary': f'{event_title}',
+                'location': 'University of Otago, 362 Leith Street, Dunedin North, Dunedin 9016, New Zealand',
+                # 'description': '',
+                'start': {
+                    'date': f'{date.date()}',
+                },
+                'end': {
+                    'date': f'{date.date()}',
+                },
+                'transparency': 'transparent',
+                'visibility': 'public'
+            }
+
+    
+            # Executing the event creation
+            event = service.events().insert(calendarId=calendar_id, body=event).execute()
+            print(f"Event created: {event.get('htmlLink')}")
 
 except HttpError as error:
     print(f'[ERROR] : {error}')
