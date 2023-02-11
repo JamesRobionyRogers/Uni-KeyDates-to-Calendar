@@ -6,9 +6,6 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 # Importing modules for google calendar api
-# import os
-# import google.auth
-# from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
@@ -74,7 +71,6 @@ try:
 
         print(month)
 
-        events = filtered_events[month]
         for date, event_title in events.items():
             event = {
                 'summary': f'{event_title}',
@@ -92,8 +88,8 @@ try:
 
     
             # Executing the event creation
-            # event = service.events().insert(calendarId=calendar_id, body=event).execute()
-            # print(f"Event created: {event.get('htmlLink')}")
+            event = service.events().insert(calendarId=calendar_id, body=event).execute()
+            print(f"Event created: {event.get('htmlLink')}")
 
             # TESTING: Printing the filtered events 
             print(event)
