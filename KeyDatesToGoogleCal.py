@@ -92,7 +92,7 @@ try:
             print(f"Event created: {event.get('htmlLink')}")
 
             # TESTING: Printing the filtered events 
-            print(event)
+            # print(event)
 
 except HttpError as error:
     print(f'[ERROR] : {error}')
