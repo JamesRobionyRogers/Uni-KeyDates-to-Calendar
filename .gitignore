@@ -1,5 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# google calendar api quickstart
+/quickstart.py
+
 # client secret
 /credentials.json
 /token.json
+
+# ignore cashe folders 
+/__pycache__
