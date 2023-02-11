@@ -52,6 +52,10 @@ for month in data:
     data[month] = event_dict
 
 
+# Defining a filter for events 
+filter_words = ['fees', 'begin', 'end', 'semester']
+# Thanks for ChatGPT for this filter code
+filtered_events = {month: {date: event for date, event in events.items() if any(word in event for word in filter_words)} for month, events in data.items()}
 
 # Google Calendar API
 
@@ -66,11 +70,11 @@ try:
     service = build('calendar', 'v3', credentials=creds)
 
     # Iterating over the data dict storing the months and events
-    for month, events in data.items():
+    for month, events in filtered_events.items():
 
         print(month)
 
-        events = data[month]
+        events = filtered_events[month]
         for date, event_title in events.items():
             event = {
                 'summary': f'{event_title}',
@@ -88,8 +92,11 @@ try:
 
     
             # Executing the event creation
-            event = service.events().insert(calendarId=calendar_id, body=event).execute()
-            print(f"Event created: {event.get('htmlLink')}")
+            # event = service.events().insert(calendarId=calendar_id, body=event).execute()
+            # print(f"Event created: {event.get('htmlLink')}")
+
+            # TESTING: Printing the filtered events 
+            print(event)
 
 except HttpError as error:
     print(f'[ERROR] : {error}')
