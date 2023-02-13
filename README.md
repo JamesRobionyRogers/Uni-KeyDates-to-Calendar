@@ -40,11 +40,12 @@ The problem I was having was that I didn't want to have to go through [Otago's k
 - `authenticateUser.py` - Small script to authenticate the user with Google Calendar API 
 - `deleteAllCalendarEvents.py` - Small script to delete all events from the user's Google Calendar (useful for testing)
 </br>
+
 - `Documentation.ipynb` - A notebook to document the process of building the project   
 
 
 
-### Running Locally
+## Running Locally
 
 1. Clone the repo using Git
 ```sh
@@ -79,7 +80,7 @@ python KeyDatesToGoogleCal.py
 
 Here are a couple of improvements I would like to make to this project in the future
 
-- [ ] Create improvements on the filter as there are still some irralevant events being added to the calendar
+- [ ] Create improvements on the filter as there are still some irrelevant events being added to the calendar
   - Could be done through removing events that contain certain words from the already filtered events
 
 
